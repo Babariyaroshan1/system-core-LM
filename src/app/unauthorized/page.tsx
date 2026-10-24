@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function UnauthorizedPage() { return <main className="unauthorized-page"><div className="eyebrow">ACCESS RESTRICTED</div><h1>You don’t have access to this area.</h1><p>Ask your La Milano administrator to review your role and outlet assignments.</p><Link href="/">Return to workspace</Link></main>; }
