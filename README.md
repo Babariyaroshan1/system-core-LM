@@ -20,7 +20,7 @@ Fill in `.env.local`. The real database password and OAuth secrets must remain l
 MONGODB_URI=mongodb+srv://<USERNAME>:<URL_ENCODED_PASSWORD>@<CLUSTER_HOST>/<DATABASE_NAME>?retryWrites=true&w=majority&appName=la-milano-attendance
 MONGODB_DB=your_database_name
 AUTH_SECRET=<random-secret>
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL=
 ADMIN_USERNAME=<initial-admin-username>
 ADMIN_PASSWORD=<unique-password-at-least-10-characters>
 BOOTSTRAP_ADMIN_EMAIL=<admin-email-used-by-the-app>
