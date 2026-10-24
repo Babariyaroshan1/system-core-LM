@@ -5,7 +5,7 @@ Attendance, employee, advance, outlet, access, payroll, audit, and Excel-reporti
 ## Requirements
 
 - Node.js 22 or newer and npm
-- MongoDB Atlas database access for `attendance_payroll`
+- MongoDB Atlas access for the configured database
 
 ## Install and Configure
 
@@ -17,8 +17,8 @@ if (-not (Test-Path .env.local)) { Copy-Item .env.example .env.local }
 Fill in `.env.local`. The real database password and OAuth secrets must remain local; `.env.local` is ignored by Git.
 
 ```dotenv
-MONGODB_URI=mongodb+srv://officelamilano_db_user:<URL_ENCODED_PASSWORD>@kuldeep.qgowx5a.mongodb.net/attendance_payroll?retryWrites=true&w=majority&appName=la-milano-attendance
-MONGODB_DB=attendance_payroll
+MONGODB_URI=mongodb+srv://<USERNAME>:<URL_ENCODED_PASSWORD>@<CLUSTER_HOST>/<DATABASE_NAME>?retryWrites=true&w=majority&appName=la-milano-attendance
+MONGODB_DB=your_database_name
 AUTH_SECRET=<random-secret>
 NEXTAUTH_URL=http://localhost:3000
 ADMIN_USERNAME=<initial-admin-username>
@@ -28,7 +28,7 @@ BOOTSTRAP_ADMIN_NAME=<admin-display-name>
 BUSINESS_TIMEZONE=Asia/Kolkata
 ```
 
-Encode special characters in the MongoDB password for use in a URI. Generate an Auth.js secret with:
+Replace every MongoDB URI placeholder with your Atlas values, and keep its database name consistent with `MONGODB_DB`. Encode special characters in the MongoDB username and password for use in a URI. Set `NEXTAUTH_URL` to the local URL for development and to the canonical site URL in the deployment environment. Keep it server-side; do not expose it or database settings through `next.config.ts`'s `env` option or `NEXT_PUBLIC_` variables. Generate an Auth.js secret with:
 
 ```powershell
 node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
@@ -44,7 +44,7 @@ The setup command connects only to the configured database. It does not drop col
 npm run setup:db
 ```
 
-If a unique index conflicts with existing records, setup stops with the index name. Review and resolve duplicate data or an incompatible existing index manually; do not drop production data to make setup pass. Run setup again after correction. Confirm Atlas network access and grant the database user read/write access to `attendance_payroll`.
+If a unique index conflicts with existing records, setup stops with the index name. Review and resolve duplicate data or an incompatible existing index manually; do not drop production data to make setup pass. Run setup again after correction. Confirm Atlas network access and grant the database user read/write access to the configured database.
 
 The application uses the existing collections: `users`, `outlets`, `employees`, `attendance`, `advances`, `loans`, `salaryRecords`, `accessPermissions`, `auditLogs`, `settings`, and `roles`. Attendance is stored as one date/outlet document with employee entries; this supports an atomic submit/lock transition.
 
