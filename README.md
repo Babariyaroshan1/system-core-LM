@@ -34,7 +34,7 @@ Replace every MongoDB URI placeholder with your Atlas values, and keep its datab
 node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ```
 
-The app uses a local username/email and password sign-in backed by MongoDB. Admin passwords are bcrypt-hashed before storage; the `ADMIN_PASSWORD` value is used only to initialize an admin without existing credentials. Keep `.env.local` private and choose a unique password.
+The app uses a local username/email and password sign-in backed by MongoDB. Admin usernames may be any non-empty text, including an email address, up to 254 characters. Admin passwords must be at least 10 and at most 1024 characters; they are SHA-256 pre-hashed and then bcrypt-hashed before storage so passwords longer than bcrypt's 72-byte input limit work. Existing bcrypt password hashes remain verifiable. The `ADMIN_PASSWORD` value is used only to initialize an admin without existing credentials. Keep `.env.local` private and choose a unique password.
 
 ## Safe Database Setup
 
@@ -77,7 +77,7 @@ npm run lint
 npm run build
 ```
 
-Open `http://localhost:3000`. The sign-in page is available without database configuration, but sign-in and protected data require the environment above. The live dashboard is database-backed and respects assigned outlets. Dashboard users can choose an outlet and business date; Net payroll is accrued from submitted attendance through that date, including configured half-day/week-off rules and approved unclaimed advances. Missing or unsubmitted attendance is not counted as an absence. Employee attendance on the dashboard can be filtered by employee and this-month, last-month, or custom dates, then downloaded as Excel or CSV when report export is permitted. **Reports & exports** provides the same Excel and CSV formats for available report types.
+Open ``. The sign-in page is available without database configuration, but sign-in and protected data require the environment above. The live dashboard is database-backed and respects assigned outlets. Dashboard users can choose an outlet and business date; Net payroll is accrued from submitted attendance through that date, including configured half-day/week-off rules and approved unclaimed advances. Missing or unsubmitted attendance is not counted as an absence. Employee attendance on the dashboard can be filtered by employee and this-month, last-month, or custom dates, then downloaded as Excel or CSV when report export is permitted. **Reports & exports** provides the same Excel and CSV formats for available report types.
 
 ## Payroll Policy
 

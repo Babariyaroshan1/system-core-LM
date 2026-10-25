@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 import { getActor } from "@/lib/permissions";
 import { getDb } from "@/lib/mongodb";
@@ -9,13 +8,8 @@ import { hashPassword } from "@/lib/passwords";
 import { z } from "zod";
 
 const credentialsSchema = z.object({
-  username: z
-    .string()
-    .trim()
-    .min(3)
-    .max(32)
-    .regex(/^[a-zA-Z0-9._-]+$/, "Use letters, numbers, dots, underscores, or hyphens."),
-  password: z.string().min(10).max(72).optional(),
+  username: z.string().trim().min(1).max(254),
+  password: z.string().min(10).max(1024).optional(),
 });
 
 export async function GET() {
@@ -65,15 +59,6 @@ export async function PUT(request: Request) {
       );
 
     const input = credentialsSchema.parse(await readJson<unknown>(request));
-    if (
-      input.password &&
-      Buffer.byteLength(input.password, "utf8") > 72
-    )
-      return NextResponse.json(
-        { error: "Password must not exceed 72 UTF-8 bytes." },
-        { status: 400 },
-      );
-
     const usernameNormalized = input.username.toLowerCase();
     const db = await getDb();
     const users = db.collection<UserDocument>("users");
@@ -88,8 +73,11 @@ export async function PUT(request: Request) {
         { status: 404 },
       );
     const existing = await users.findOne({
-      _id: { $ne: new ObjectId(actor.id) },
-      usernameNormalized,
+      _id: { $ne: actor.id },
+      $or: [
+        { usernameNormalized },
+        { emailNormalized: usernameNormalized },
+      ],
     });
     if (existing)
       return NextResponse.json(

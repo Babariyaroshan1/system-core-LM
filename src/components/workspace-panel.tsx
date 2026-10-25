@@ -5311,28 +5311,26 @@
         ) : (
           <form className="form-grid" onSubmit={save}>
             <label className="field">
-              <span>Admin username</span>
+              <span>Admin username or email</span>
               <input
                 name="admin-username"
                 type="text"
                 autoComplete="username"
-                minLength={3}
-                maxLength={32}
-                pattern="[A-Za-z0-9._-]+"
+                maxLength={254}
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
                 required
               />
             </label>
             <label className="field">
-              <span>New password (optional; at least 10 characters)</span>
+              <span>New password (optional; at least 10 characters, up to 1024)</span>
               <span className="password-input">
                 <input
                   name="admin-password"
                   type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
                   minLength={10}
-                  maxLength={72}
+                  maxLength={1024}
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                 />
@@ -5354,7 +5352,7 @@
                 type={showPassword ? "text" : "password"}
                 autoComplete="new-password"
                 minLength={10}
-                maxLength={72}
+                maxLength={1024}
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
               />

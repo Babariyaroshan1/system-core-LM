@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import bcrypt from "bcryptjs";
 import { calculatePayroll } from "../src/lib/payroll/calculate.ts";
 import { getIndiaDate, getIndiaMonth, getMonthDates } from "../src/lib/payroll/dates.ts";
 import { findExistingPayrollEmployees } from "../src/lib/payroll/duplicate.ts";
@@ -285,4 +286,15 @@ test("passwords are salted hashes and verify only against the original password"
   assert.notEqual(hash, password);
   assert.equal(await verifyPassword(password, hash), true);
   assert.equal(await verifyPassword("different-password", hash), false);
+});
+
+test("password hashes accept long passwords and preserve existing bcrypt hashes", async () => {
+  const longPassword = "Long-Admin-Pass-" + "x".repeat(200);
+  const longHash = await hashPassword(longPassword);
+  assert.equal(await verifyPassword(longPassword, longHash), true);
+  assert.equal(await verifyPassword(`${longPassword}x`, longHash), false);
+
+  const legacyPassword = "Existing-Admin-Pass-2026";
+  const legacyHash = await bcrypt.hash(legacyPassword, 12);
+  assert.equal(await verifyPassword(legacyPassword, legacyHash), true);
 });

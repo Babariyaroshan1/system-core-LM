@@ -9,7 +9,7 @@ import { z } from "zod";
 
 const credentialsSchema = z.object({
   identifier: z.string().trim().min(1).max(254),
-  password: z.string().min(1).max(128),
+  password: z.string().min(1).max(1024),
 });
 const dummyPasswordHash =
   "$2b$12$It0.934x2gQEMy6a8bdze.fXVjL7M3XJyl71ltWhyUafc..AiA4/m";
