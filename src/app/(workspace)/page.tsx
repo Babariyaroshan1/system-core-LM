@@ -1,10 +1,12 @@
 import { WorkspacePanel } from "@/components/workspace-panel";
+import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { getActor } from "@/lib/permissions";
 
 export const instant = false;
 
 export default async function DashboardPage() {
+  await connection();
   const actor = await getActor();
   if (!actor) redirect("/login");
   if (!actor.permissions.includes("dashboard.read")) {
